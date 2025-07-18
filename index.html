@@ -115,8 +115,10 @@
         function movePlayer() {
             if (upPressed == true && player.y > 0) {
                 player.y -= player.yspeed;
+                upPressed = false;
             } else if (downPressed == true && (player.y + player.height) < 600) {
                 player.y += player.yspeed;
+                downPressed = false;
             } else {
                 player.y += 1
             }
