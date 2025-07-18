@@ -1,15 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flappy Bird</title>
-    <link rel = "stylesheet" href = "style.css" />
+    <link rel = "stylesheet" href="style.css" />
+    <style>
+        #gameCanvas {
+            width: 100vw;
+            height: 30vh;
+            border: 3px solid black;
+        }
+        #upButton {
+            width: 10vw;
+            height: 10vh;
+            border: 3px solid black;
+        }
+        #downButton {
+            width: 10vw;
+            height: 10vh;
+            border: 3px solid black;
+        }
+    </style>
 </head>
 <body>
     <h1> Flappy Bird</h1>
-    <canvas id="gameCanvas" width="800" height="300" style = "border: 3px solid black"> </canvas>
+    <canvas id="gameCanvas"> </canvas>
+    <button id="upButton"> Up </button>
+    <button id="downButton"> Down </button>
     <script>
-        var canvas = document.getElementById("gameCanvas");
-        var ctx = canvas.getContext("2d");
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const upButton = document.getElementById("upButton");
+        const downButton = document.getElementById("downButton");
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight *.3;
+        }
+        resize();
+
+        window.addEventListener('resize', resize);
 
         var player = {
             width: 30,
@@ -26,17 +56,51 @@
         var bottomblocks = [];
         var bottomblockswidth = 30;
 
-        var upPressed = false;
-        var downPressed = false;
+        let upPressed = false;
+        let downPressed = false;
 
         document.addEventListener("keydown", function(e) {
-            if (e.key == "ArrowUp") upPressed = true;
-            if (e.key == "ArrowDown") downPressed = true;
+            if (e.repeat) {
+                return;
+            }
+
+            if (e.key == "ArrowUp") {
+                upPressed = true;
+            }
+
+            if (e.key == "ArrowDown") {
+                downPressed = true;
+            }
         });
 
         document.addEventListener("keyup", function(e) {
-            if (e.key == "ArrowUp") upPressed = false;
-            if (e.key == "ArrowDown") downPressed = false;
+            if (e.key == "ArrowUp") {
+                upPressed = false;
+            }
+
+            if (e.key == "ArrowDown") {
+                downPressed = false;
+            }
+        });
+
+        upButton.addEventListener("touchstart", function(e) {
+            upPressed = true;
+            e.preventDefault;
+        });
+
+        downButton.addEventListener("touchstart", function(e) {
+            downPressed = true;
+            e.preventDefault
+        });
+
+        upButton.addEventListener("touchend", function(e) {
+            upPressed = false;
+            e.preventDefault;
+        });
+
+        downButton.addEventListener("touchend", function(e) {
+            downPressed = false;
+            e.preventDefault;
         });
 
         function drawPlayer() {
@@ -81,8 +145,10 @@
         function movePlayer() {
             if (upPressed == true && player.y > 0) {
                 player.y -= player.yspeed;
+                upPressed = false;
             } else if (downPressed == true && (player.y + player.height) < 600) {
                 player.y += player.yspeed;
+                downPressed = false;
             } else {
                 player.y += 1
             }
