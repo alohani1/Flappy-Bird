@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flappy Bird</title>
+    <link rel = "stylesheet" href = "style.css" />
+</head>
+<body>
+    <h1> Flappy Bird</h1>
+    <canvas id="gameCanvas" width="800" height="300" style = "border: 3px solid black"> </canvas>
+    <script>
+        var canvas = document.getElementById("gameCanvas");
+        var ctx = canvas.getContext("2d");
+
+        var player = {
+            width: 30,
+            height: 30,
+            x: 10,
+            y: canvas.height/2,
+            xspeed: 0,
+            yspeed: 4,
+        };
+
+        var topblocks = [];
+        var topblockwidth = 30;
+
+        var bottomblocks = [];
+        var bottomblockswidth = 30;
+
+        var upPressed = false;
+        var downPressed = false;
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key == "ArrowUp") upPressed = true;
+            if (e.key == "ArrowDown") downPressed = true;
+        });
+
+        document.addEventListener("keyup", function(e) {
+            if (e.key == "ArrowUp") upPressed = false;
+            if (e.key == "ArrowDown") downPressed = false;
+        });
+
+        function drawPlayer() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        function drawBlocks() {
+            ctx.fillStyle = "red";
+            topblocks.forEach(function(topblock) {
+                ctx.fillRect(topblock.x, topblock.y, topblockwidth, topblock.height);
+            });
+            bottomblocks.forEach(function(bottomblock) {
+                ctx.fillRect(bottomblock.x, bottomblock.y, bottomblockswidth, bottomblock.height);
+            });
+        }
+
+        function moveBlocks() {
+            for (var i = topblocks.length - 1; i >= 0; i--) {
+                topblocks[i].x -= topblocks[i].speed;
+                if (topblocks[i].x <= (player.x + player.width) && (topblocks[i].x + topblockwidth) >= player.x && topblocks[i].height >= player.y) {
+                    alert ("Game Over");
+                    document.location.reload();
+                }
+                if ((topblocks[i].x + topblockwidth) <= 0) {
+                    topblocks.splice(i,1);
+                }
+            }
+            for (var j = bottomblocks.length - 1; j >= 0; j--) {
+                bottomblocks[j].x -= bottomblocks[j].speed;
+                if (bottomblocks[j].x <= (player.x + player.width) && (bottomblocks[j].x + bottomblockswidth) >= player.x && bottomblocks[j].y <= (player.y + player.height)) {
+                    alert ("Game Over");
+                    document.location.reload();
+                }
+                if ((bottomblocks[j].x + bottomblockswidth) <= 0) {
+                    bottomblocks.splice(j,1);
+                }
+            }
+
+        }
+
+        function movePlayer() {
+            if (upPressed == true && player.y > 0) {
+                player.y -= player.yspeed;
+            } else if (downPressed == true && (player.y + player.height) < 600) {
+                player.y += player.yspeed;
+            } else {
+                player.y += 1
+            }
+
+            player.x += player.xspeed;
+        }
+
+        function spawnBlocks() {
+            var gap = 90;
+            var topheight = Math.random() * (canvas.height - gap);
+            var bottomY = topheight + 60;
+            var bottomheight = canvas.height - bottomY;
+
+            topblocks.push({x: canvas.width,y: 0, height: topheight, speed: 2});
+            bottomblocks.push({x: canvas.width, y: bottomY, height: bottomheight, speed: 2});
+        }
+
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            movePlayer();
+            moveBlocks();
+            drawPlayer();
+            drawBlocks();
+
+            requestAnimationFrame(draw);
+        }
+        
+        setInterval(spawnBlocks, 1500);
+        draw();
+
+
+
+
+
+
+    </script>
+</body>
+</html>
