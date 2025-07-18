@@ -10,14 +10,24 @@
             height: 30vh;
             border: 3px solid black;
         }
+        #upButton {
+            border: 3px solid black;
+        }
+        #downButton {
+            border: 3px solid black;
+        }
     </style>
 </head>
 <body>
     <h1> Flappy Bird</h1>
     <canvas id="gameCanvas"> </canvas>
+    <button id="upButton"> Up </button>
+    <button id="downButton"> Down </button>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        const upButton = document.getElementbyId("upButton");
+        const downButton = document.getElementbyId("downButton");
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -42,17 +52,25 @@
         var bottomblocks = [];
         var bottomblockswidth = 30;
 
-        var upPressed = false;
-        var downPressed = false;
+        let upPressed = false;
+        let downPressed = false;
 
         document.addEventListener("keydown", function(e) {
-            if (e.key == "ArrowUp") upPressed = true;
-            if (e.key == "ArrowDown") downPressed = true;
+            if (e.key == "ArrowUp" && !e.repeat) upPressed = true;
+            if (e.key == "ArrowDown" && !e.repeat) downPressed = true;
         });
 
         document.addEventListener("keyup", function(e) {
             if (e.key == "ArrowUp") upPressed = false;
             if (e.key == "ArrowDown") downPressed = false;
+        });
+
+        upButton.addEventListener("click", function(e) {
+            upPressed = true;
+        });
+
+        downButton.addEventListener("click", function(e) {
+            downPressed = true;
         });
 
         function drawPlayer() {
